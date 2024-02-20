@@ -18,21 +18,27 @@ import java.util.List;
 
 /**
  * Main class, used to create a block sweep task
+ *
+ *创建扫描配置的主要函数都在里面了。
  */
 public class MagicianBlockchainScan {
 
     /**
      * Business class, Used to perform scan block logic
+     * 业务类，用于执行扫描块逻辑
+     *
      */
     private ScanService scanService;
 
     /**
      * Configure the parameters required for this block scanning task
+     * 配置本次块扫描任务所需的参数
      */
     private BlockChainConfig blockChainConfig;
 
     /**
      * Does the rpc address exist
+     * rpc地址是否存在
      */
     private boolean rpcUrlExist = false;
 

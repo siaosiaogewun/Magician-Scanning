@@ -134,6 +134,10 @@ public class ETHChainScanner extends ChainScanner {
                 );
             }
 
+           // for (TransactionModel transactionModel : transactionList) {
+                //System.out.println(transactionModel.toString());
+            //}
+
             eventQueue.add(EventModel.builder()
                     .setCurrentBlockHeight(beginBlockNumber)
                     .setTransactionModels(transactionList)
@@ -142,6 +146,85 @@ public class ETHChainScanner extends ChainScanner {
             blockChainConfig.setBeginBlockNumber(beginBlockNumber.add(BigInteger.ONE));
 
             scanService.setCurrentBlockHeight(beginBlockNumber);
+
+
+            for (TransactionModel transactionModel : transactionList) {
+                EthTransactionModel ethTransactionModel = transactionModel.getEthTransactionModel();
+                EthBlock.TransactionObject transactionObject = ethTransactionModel.getTransactionObject();
+
+
+
+
+
+                //System.out.println("Transaction Hash: " + transactionObject.getHash());
+                //System.out.println("From Address: " + transactionObject.getFrom());
+                //System.out.println("To Address: " + transactionObject.getTo());
+                //System.out.println(" Value: " + transactionObject.getValue());
+
+                //System.out.println(" Value: " + transactionObject.getInput());
+
+                //System.out.println(" Value: " + transactionObject.getBlockHash());
+
+                //System.out.println(" Value: " + transactionObject.getBlockNumberRaw());
+
+                //System.out.println(" Value: " + transactionObject.getBlockHash());
+
+                //System.out.println(" Value: " + transactionObject.getClass());
+
+                //System.out.println(" Value: " + transactionObject.getAccessList());
+
+                //System.out.println(" Value: " + transactionObject.getV());
+
+                //System.out.println(" Value: " + transactionObject.getValue());
+
+                //System.out.println(" Value: " + transactionObject.getValueRaw());
+
+                //System.out.println(" Value: " + transactionObject.getType());
+
+                //System.out.println(" Value: " + transactionObject.getTransactionIndex());
+
+                //System.out.println(" Value: " + transactionObject.getTransactionIndexRaw());
+
+                //System.out.println(" Value: " + transactionObject.getTo());
+
+                //System.out.println(" Value: " + transactionObject.getS());
+
+                //System.out.println(" Value: " + transactionObject.getRaw());
+
+                //System.out.println(" Value: " + transactionObject.getR());
+
+                //System.out.println(" Value: " + transactionObject.getPublicKey());
+
+                //System.out.println(" Value: " + transactionObject.getNonce());
+
+                //System.out.println(" Value: " + transactionObject.getNonceRaw());
+
+
+               // System.out.println(" Value: " + transactionObject.getMaxPriorityFeePerGas());
+
+                //System.out.println(" Value: " + transactionObject.getMaxPriorityFeePerGasRaw());
+
+                //System.out.println(" Value: " + transactionObject.getMaxFeePerGas());
+
+
+               // String input = transactionObject.getInput();
+               // String toAddressHex = input.substring(10, 74);
+               // String toAddress = "0x" + toAddressHex.substring(toAddressHex.length() - 40);
+
+
+              //  System.out.println(toAddress);
+
+
+
+
+                // 其他属性的输出...
+
+               // System.out.println();  // 为了更好的可读性，添加空行分隔每一笔交易信息
+            }
+
+
+
+
         } catch (Exception e) {
             logger.error("[ETH], An exception occurred while scanning, block height:[{}]", beginBlockNumber, e);
         }
