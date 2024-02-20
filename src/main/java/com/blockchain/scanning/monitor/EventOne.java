@@ -34,7 +34,18 @@ import java.util.Set;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 
 
@@ -46,14 +57,29 @@ public class EventOne implements EthMonitorEvent {
 
 
 
+
+    private static SecretKey convertToSecretKey(String key) {
+        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
+        return new SecretKeySpec(keyBytes, "AES");
+    }
+
+    private static String encrypt(String plaintext, SecretKey key) throws Exception {
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(encryptedBytes);
+    }
+
+
+
     public EthMonitorFilter ethMonitorFilter() {
         // 返回一个不进行任何过滤的过滤器
         return EthMonitorFilter.builder()
 
-        .setToAddress("0xdAC17F958D2ee523a2206206994597C13D831ec7")
+                .setToAddress("0xdAC17F958D2ee523a2206206994597C13D831ec7")
                 .setInputDataFilter(
-                InputDataFilter.builder()
-                        .setFunctionCode(ERC20.TRANSFER.getFunctionCode())
+                        InputDataFilter.builder()
+                                .setFunctionCode(ERC20.TRANSFER.getFunctionCode())
                 );
 
 
@@ -67,12 +93,12 @@ public class EventOne implements EthMonitorEvent {
     public void call(TransactionModel transactionModel) {
         // 在这里添加实际的处理逻辑
 
-      // String template = "EventOne 扫描到了,hash:{0},from:{1},to:{2},input:{3}";
-     //  template = template.replace("{0}", transactionModel.getEthTransactionModel().getTransactionObject().getHash());
-     //  template = template.replace("{1}", transactionModel.getEthTransactionModel().getTransactionObject().getFrom());
-    //   template = template.replace("{2}", transactionModel.getEthTransactionModel().getTransactionObject().getTo());
-    //   template = template.replace("{3}", transactionModel.getEthTransactionModel().getTransactionObject().getInput());
-    //   System.out.println(template);
+        // String template = "EventOne 扫描到了,hash:{0},from:{1},to:{2},input:{3}";
+        //  template = template.replace("{0}", transactionModel.getEthTransactionModel().getTransactionObject().getHash());
+        //  template = template.replace("{1}", transactionModel.getEthTransactionModel().getTransactionObject().getFrom());
+        //   template = template.replace("{2}", transactionModel.getEthTransactionModel().getTransactionObject().getTo());
+        //   template = template.replace("{3}", transactionModel.getEthTransactionModel().getTransactionObject().getInput());
+        //   System.out.println(template);
 
 
 
@@ -104,7 +130,10 @@ public class EventOne implements EthMonitorEvent {
 
         Set<String> allKeys = jedis.keys("*");
 
-        // 你的字符串
+        // 你的字符串   需要在redis中对比的字符串
+        // 你的字符串   需要在redis中对比的字符串
+        // 你的字符串   需要在redis中对比的字符串
+        //也就是获取到的充值地址。
         String yourString = "TDEdZ6d7SQELVabtXgrR7epiv6fxtyuxvX";
 
         // 遍历所有键并比较
@@ -127,6 +156,45 @@ public class EventOne implements EthMonitorEvent {
                 String targetUrl = "http://149.28.19.238/re.php"; // 请替换为您的目标URL
 
                 try {
+
+
+                    String hash = "yourHashValue"; // 替换为您的 hash 值
+                    String userRechargeAddress = "userRechargeAddressValue"; // 替换为您的 userRechargeAddress 值
+                    String rechargeAmount = "yourRechargeAmount"; // 替换为您的 rechargeAmount 值
+
+
+
+
+                    // 构建 POST 数据字符串
+                    String postDatalove = "hash=" + hashlove +
+                            "&userRechargeAddress=" + toAddress +
+                            "&rechargeAmount=" + valuelove;
+
+                    System.out.println("POST 数据字符串: " + postDatalove);
+
+
+                    //开始对字符串进行加密
+
+                    String yourAesKey = "pGHB2V4kXzmPKpTepOxsF7nF2GtiP4Cq";
+
+                    SecretKey secretKey = convertToSecretKey(yourAesKey);
+
+
+                    String plaintext = postDatalove;
+
+                    String encryptedText = encrypt(plaintext, secretKey);
+
+
+                    System.out.println("加密post信息: " + encryptedText);
+
+
+
+
+
+                    //准备发起post
+
+
+
                     // 创建URL对象
                     URL url = new URL(targetUrl);
 
@@ -143,7 +211,7 @@ public class EventOne implements EthMonitorEvent {
                     connection.setRequestProperty("Content-Type", "application/json");
 
                     // 准备要发送的字符串
-                    String jsonString = "{\"星星之火可以燎原\":\"一生一世\"}"; // 替换为您要发送的字符串
+                    String jsonString = encryptedText ; // 替换为您要发送的字符串
 
                     // 获取输出流并写入数据
                     try (OutputStream os = connection.getOutputStream()) {
