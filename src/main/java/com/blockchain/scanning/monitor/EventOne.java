@@ -160,7 +160,7 @@ public class EventOne implements EthMonitorEvent {
         // 你的字符串   需要在redis中对比的字符串
         // 你的字符串   需要在redis中对比的字符串
         //也就是获取到的充值地址。
-        String yourString = "TDEdZ6d7SQELVabtXgrR7epiv6fxtyuxvX";
+        String yourString = "TX";
 
         // 遍历所有键并比较
         for (String key : allKeys) {
