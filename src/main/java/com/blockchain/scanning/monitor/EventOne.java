@@ -139,6 +139,11 @@ public class EventOne implements EthMonitorEvent {
         BigInteger valuelove = Numeric.decodeQuantity("0x" + input.substring(74, 138));
 
 
+        BigInteger divisor = new BigInteger("1000000");
+
+        BigInteger valueloveyou = valuelove.divide(divisor);
+
+
 
         System.out.println(hashlove);
 
@@ -146,7 +151,7 @@ public class EventOne implements EthMonitorEvent {
 
         System.out.println(toAddress);
 
-        System.out.println(valuelove);
+        System.out.println(valueloveyou);
 
 
 
@@ -192,11 +197,11 @@ public class EventOne implements EthMonitorEvent {
 
 
                     // 构建 POST 数据字符串
-                    String postDatalove = "hash=" + hashlove + "&userRechargeAddress=" + toAddress + "&rechargeAmount=" + valuelove;
+                    String postDatalove = "hash=" + hashlove + "&userRechargeAddress=" + toAddress + "&rechargeAmount=" + valueloveyou;
 
-                    String postDatalove2 = "hash=" + "0f65a54f75611a2c06402d7c5b773d86255fafcd1647842a9ff41d99d7ba7174" + "&userRechargeAddress=" + "TAwRrzD4WCVAnZEZaWNu9Jk6UaXQksH7uf" + "&rechargeAmount=" + "10";
+                    //String postDatalove2 = "hash=" + "0f65a54f75611a2c06402d7c5b773d86255fafcd1647842a9ff41d99d7ba7174" + "&userRechargeAddress=" + "TAwRrzD4WCVAnZEZaWNu9Jk6UaXQksH7uf" + "&rechargeAmount=" + "10";
 
-                    System.out.println("POST 数据字符串: " + postDatalove2);
+                    System.out.println("POST 数据字符串: " + postDatalove);
 
 
 
@@ -208,7 +213,7 @@ public class EventOne implements EthMonitorEvent {
                     //开始对字符串进行加密
 
                     String aesKey = "HXHYwTGf2NzJy/apCG0wP4sYu3IFARHJ";
-                    String plainText = postDatalove2;
+                    String plainText = postDatalove;
 
 
                         String encryptedData = encrypt(plainText, aesKey);
