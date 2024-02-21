@@ -46,6 +46,12 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 
 
@@ -57,18 +63,38 @@ public class EventOne implements EthMonitorEvent {
 
 
 
+    public static String encrypt(String plainText, String key) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 
-    private static SecretKey convertToSecretKey(String key) {
-        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
-        return new SecretKeySpec(keyBytes, "AES");
+        // Generate a random IV
+        byte[] iv = generateRandomIV();
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParameterSpec);
+
+        byte[] encryptedBytes = cipher.doFinal(plainText.getBytes(StandardCharsets.UTF_8));
+
+        // Combine IV and encrypted data
+        byte[] combined = new byte[iv.length + encryptedBytes.length];
+        System.arraycopy(iv, 0, combined, 0, iv.length);
+        System.arraycopy(encryptedBytes, 0, combined, iv.length, encryptedBytes.length);
+
+        return Base64.getEncoder().encodeToString(combined);
     }
 
-    private static String encrypt(String plaintext, SecretKey key) throws Exception {
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
-        return Base64.getEncoder().encodeToString(encryptedBytes);
+
+
+
+
+    private static byte[] generateRandomIV() {
+        SecureRandom random = new SecureRandom();
+        byte[] iv = new byte[16];
+        random.nextBytes(iv);
+        return iv;
     }
+
+
 
 
 
@@ -153,7 +179,7 @@ public class EventOne implements EthMonitorEvent {
 
 
 
-                String targetUrl = "http://149.28.19.238/re.php"; // 请替换为您的目标URL
+                String targetUrl = "http://149.28.19.238/hello.php"; // 请替换为您的目标URL
 
                 try {
 
@@ -166,26 +192,30 @@ public class EventOne implements EthMonitorEvent {
 
 
                     // 构建 POST 数据字符串
-                    String postDatalove = "hash=" + hashlove +
-                            "&userRechargeAddress=" + toAddress +
-                            "&rechargeAmount=" + valuelove;
+                    String postDatalove = "hash=" + hashlove + "&userRechargeAddress=" + toAddress + "&rechargeAmount=" + valuelove;
 
-                    System.out.println("POST 数据字符串: " + postDatalove);
+                    String postDatalove2 = "hash=" + "0f65a54f75611a2c06402d7c5b773d86255fafcd1647842a9ff41d99d7ba7174" + "&userRechargeAddress=" + "TAwRrzD4WCVAnZEZaWNu9Jk6UaXQksH7uf" + "&rechargeAmount=" + "10";
+
+                    System.out.println("POST 数据字符串: " + postDatalove2);
+
+
+
+
+
+
 
 
                     //开始对字符串进行加密
 
-                    String yourAesKey = "pGHB2V4kXzmPKpTepOxsF7nF2GtiP4Cq";
-
-                    SecretKey secretKey = convertToSecretKey(yourAesKey);
-
-
-                    String plaintext = postDatalove;
-
-                    String encryptedText = encrypt(plaintext, secretKey);
+                    String aesKey = "HXHYwTGf2NzJy/apCG0wP4sYu3IFARHJ";
+                    String plainText = postDatalove2;
 
 
-                    System.out.println("加密post信息: " + encryptedText);
+                        String encryptedData = encrypt(plainText, aesKey);
+                        System.out.println("Response:\n" + encryptedData);
+
+
+                    String lovelove= encryptedData;
 
 
 
@@ -211,7 +241,7 @@ public class EventOne implements EthMonitorEvent {
                     connection.setRequestProperty("Content-Type", "application/json");
 
                     // 准备要发送的字符串
-                    String jsonString = encryptedText ; // 替换为您要发送的字符串
+                    String jsonString = lovelove ; // 替换为您要发送的字符串
 
                     // 获取输出流并写入数据
                     try (OutputStream os = connection.getOutputStream()) {

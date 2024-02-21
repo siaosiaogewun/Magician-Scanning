@@ -1,7 +1,6 @@
 package com.blockchain.scanning;
 import java.math.BigInteger;
 import java.util.List;
-
 import com.blockchain.scanning.biz.thread.EventThreadPool;
 import com.blockchain.scanning.commons.codec.EthAbiCodec;
 import com.blockchain.scanning.commons.config.rpcinit.impl.EthRpcInit;
