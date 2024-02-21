@@ -52,6 +52,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 
 
@@ -139,10 +141,10 @@ public class EventOne implements EthMonitorEvent {
         BigInteger valuelove = Numeric.decodeQuantity("0x" + input.substring(74, 138));
 
 
-        BigInteger divisor = new BigInteger("1000000");
+        // Dividing valuelove by 1000000 using BigDecimal for precision
+        BigDecimal divisor = new BigDecimal("1000000");
 
-        BigInteger valueloveyou = valuelove.divide(divisor);
-
+        BigDecimal valueloveyou = new BigDecimal(valuelove).divide(divisor);
 
 
         System.out.println(hashlove);
